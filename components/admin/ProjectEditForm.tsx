@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Save } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
+import { PROJECT_CATEGORIES } from "@/lib/project-categories";
 
 type ProjectEditFormProps = {
   project: {
@@ -74,6 +75,17 @@ export function ProjectEditForm({
 
     if (!normalizedSlug) {
       setError("A valid slug is required.");
+      setLoading(false);
+      return;
+    }
+
+    if (
+      category &&
+      !PROJECT_CATEGORIES.includes(
+        category as (typeof PROJECT_CATEGORIES)[number]
+      )
+    ) {
+      setError("Please select a valid project category.");
       setLoading(false);
       return;
     }
@@ -220,16 +232,28 @@ export function ProjectEditForm({
             Category
           </label>
 
-          <input
-            id="category"
-            type="text"
-            value={category}
-            onChange={(event) =>
-              setCategory(event.target.value)
-            }
-            className="w-full rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-[#ff5a1f]"
-            placeholder="Graphic Design"
-          />
+          <select
+              id="category"
+              value={category}
+              onChange={(event) =>
+                setCategory(event.target.value)
+              }
+              className="w-full rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white outline-none transition focus:border-[#ff5a1f]"
+            >
+              <option value="" className="bg-[#1c1c1c] text-white">
+                Select category
+              </option>
+            
+              {PROJECT_CATEGORIES.map((item) => (
+                <option
+                  key={item}
+                  value={item}
+                  className="bg-[#1c1c1c] text-white"
+                >
+                  {item}
+                </option>
+              ))}
+            </select>
         </div>
 
         <div>

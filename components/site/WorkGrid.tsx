@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowUpRight, FolderOpen } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { PROJECT_CATEGORIES } from "@/lib/project-categories";
+
 type Project = {
   id: string;
   title: string;
@@ -21,10 +23,7 @@ type WorkGridProps = {
 
 const categories = [
   "All",
-  "Graphic Design",
-  "Motion Design",
-  "UI/UX",
-  "Web Development",
+  ...PROJECT_CATEGORIES,
 ];
 
 export function WorkGrid({ projects }: WorkGridProps) {
