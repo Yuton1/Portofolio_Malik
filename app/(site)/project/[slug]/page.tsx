@@ -1,6 +1,8 @@
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ArrowLeft, ArrowUpRight, FolderOpen } from "lucide-react";
+import { ProjectGallery } from "@/components/site/ProjectGallery";
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -31,22 +33,27 @@ type Project = {
   tags: string[] | null;
 };
 
+type MediaWithUrl = MediaItem & {
+  signedUrl: string | null;
+};
+
 export default async function ProjectDetailPage({
   params,
 }: ProjectPageProps) {
   await connection();
 
   const { slug } = await params;
-
   const supabase = await createClient();
 
-  // Mengambil data project
+  // Fetch published project
   const {
     data: projectData,
     error: projectError,
   } = await supabase
     .from("projects")
-    .select("*")
+    .select(
+      "id, title, slug, description, category, year, role, tags"
+    )
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
@@ -62,13 +69,15 @@ export default async function ProjectDetailPage({
 
   const project = projectData as Project;
 
-  // Mengambil media project
+  // Fetch project media
   const {
     data: media,
     error: mediaError,
   } = await supabase
     .from("project_media")
-    .select("*")
+    .select(
+      "id, project_id, type, url, title, display_order"
+    )
     .eq("project_id", project.id)
     .order("display_order", {
       ascending: true,
@@ -78,10 +87,10 @@ export default async function ProjectDetailPage({
     console.error("Media fetch error:", mediaError);
   }
 
-  // Membuat signed URL dari Storage private
+  // Generate signed URLs for private Storage
   const adminSupabase = createAdminClient();
 
-  const mediaWithUrls = await Promise.all(
+  const mediaWithUrls: MediaWithUrl[] = await Promise.all(
     ((media ?? []) as MediaItem[]).map(async (item) => {
       const { data, error } = await adminSupabase.storage
         .from("portfolio-media")
@@ -102,97 +111,108 @@ export default async function ProjectDetailPage({
     })
   );
 
+  // Use the first successfully loaded media as the hero.
+  const heroMediaIndex = mediaWithUrls.findIndex(
+    (item) => item.signedUrl !== null
+  );
+
+  const heroMedia =
+    heroMediaIndex >= 0
+      ? mediaWithUrls[heroMediaIndex]
+      : null;
+
+  // Exclude hero media from the gallery.
+  const galleryMedia = mediaWithUrls.filter(
+    (_, index) => index !== heroMediaIndex
+  );
+
   return (
-    <main className="min-h-screen bg-[#1c1c1c] px-5 pb-24 pt-32 text-white sm:px-8 md:px-12 md:pt-40">
-      <div className="mx-auto max-w-7xl">
-        {/* Back Navigation */}
+    <main className="min-h-screen bg-white pb-24 pt-28 text-[#1c1c1c] dark:bg-[#1c1c1c] dark:text-white sm:pt-32">
+      <div className="mx-auto max-w-[1600px] px-5 sm:px-8 md:px-12 lg:px-16">
+        {/* Back navigation */}
         <Link
           href="/work"
-          className="group mb-12 inline-flex items-center gap-3 text-sm text-white/50 transition hover:text-[#ff5a1f]"
+          className="group mb-12 inline-flex items-center gap-3 text-sm text-black/50 transition-colors hover:text-[#ff5a1f] dark:text-white/50"
         >
-          <span className="text-lg transition-transform group-hover:-translate-x-1">
-            ←
-          </span>
-
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
           Back to Work
         </Link>
 
-        {/* Project Header */}
-        <header className="mb-16 max-w-5xl">
-          {/* Category and Year */}
-          <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium uppercase tracking-[0.2em] text-[#ff5a1f]">
+        {/* Project header */}
+        <header className="mb-12 md:mb-16">
+          <div className="mb-6 flex flex-wrap items-center gap-3 text-xs font-medium uppercase tracking-[0.18em]">
             {project.category && (
-              <span>{project.category}</span>
+              <span className="text-[#ff5a1f]">
+                {project.category}
+              </span>
             )}
 
             {project.category && project.year && (
-              <span className="text-white/30">/</span>
+              <span className="text-black/20 dark:text-white/20">
+                /
+              </span>
             )}
 
-            {project.year && <span>{project.year}</span>}
+            {project.year && (
+              <span className="text-black/40 dark:text-white/40">
+                {project.year}
+              </span>
+            )}
           </div>
 
-          {/* Title */}
-          <h1 className="max-w-5xl text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-8xl">
-            {project.title}
-          </h1>
+          <div className="grid gap-8 lg:grid-cols-[1.5fr_0.7fr] lg:items-end">
+            <h1 className="max-w-5xl text-4xl font-semibold leading-[0.98] tracking-[-0.055em] sm:text-6xl md:text-7xl lg:text-8xl">
+              {project.title}
+              <span className="text-[#ff5a1f]">.</span>
+            </h1>
 
-          {/* Description */}
-          {project.description && (
-            <p className="mt-8 max-w-3xl text-base leading-8 text-white/60 sm:text-lg">
-              {project.description}
-            </p>
-          )}
-
-          {/* Project Information */}
-          <div className="mt-10 grid gap-8 border-t border-white/10 pt-8 sm:grid-cols-2 md:grid-cols-3">
-            {/* Role */}
-            {project.role && (
-              <div>
-                <p className="mb-2 text-xs uppercase tracking-[0.15em] text-white/40">
-                  Role
-                </p>
-
-                <p className="text-sm font-medium text-white/90">
-                  {project.role}
-                </p>
-              </div>
+            {project.description && (
+              <p className="max-w-xl text-sm leading-7 text-black/60 dark:text-white/60 sm:text-base sm:leading-8 lg:justify-self-end">
+                {project.description}
+              </p>
             )}
+          </div>
 
-            {/* Category */}
-            {project.category && (
-              <div>
-                <p className="mb-2 text-xs uppercase tracking-[0.15em] text-white/40">
-                  Category
-                </p>
+          {/* Project metadata */}
+          <div className="mt-10 grid grid-cols-2 gap-6 border-y border-black/10 py-6 dark:border-white/10 md:grid-cols-3">
+            <div>
+              <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">
+                Project Type
+              </p>
 
-                <p className="text-sm font-medium text-white/90">
-                  {project.category}
-                </p>
-              </div>
-            )}
+              <p className="text-sm font-medium">
+                {project.category ?? "Creative Project"}
+              </p>
+            </div>
 
-            {/* Year */}
-            {project.year && (
-              <div>
-                <p className="mb-2 text-xs uppercase tracking-[0.15em] text-white/40">
-                  Year
-                </p>
+            <div>
+              <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">
+                My Role
+              </p>
 
-                <p className="text-sm font-medium text-white/90">
-                  {project.year}
-                </p>
-              </div>
-            )}
+              <p className="text-sm font-medium">
+                {project.role ?? "Creative"}
+              </p>
+            </div>
+
+            <div>
+              <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">
+                Year
+              </p>
+
+              <p className="text-sm font-medium">
+                {project.year ?? "—"}
+              </p>
+            </div>
           </div>
 
           {/* Tags */}
           {project.tags && project.tags.length > 0 && (
-            <div className="mt-8 flex flex-wrap gap-2">
+            <div className="mt-6 flex flex-wrap gap-2">
               {project.tags.map((tag, index) => (
                 <span
                   key={`${tag}-${index}`}
-                  className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-white/60"
+                  className="rounded-full border border-black/10 px-4 py-2 text-xs text-black/60 dark:border-white/10 dark:text-white/60"
                 >
                   {tag}
                 </span>
@@ -200,91 +220,31 @@ export default async function ProjectDetailPage({
             </div>
           )}
         </header>
+        <ProjectGallery media={mediaWithUrls} projectTitle={project.title} />
 
-        {/* Media Gallery */}
-        <section>
-          <div className="mb-6 flex items-center justify-between">
-            <p className="text-xs uppercase tracking-[0.2em] text-white/40">
-              Project Showcase
-            </p>
+        {/* Bottom navigation */}
+        <footer className="mt-20 border-t border-black/10 pt-8 dark:border-white/10 md:mt-28">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-black/40 dark:text-white/40">
+                Explore More
+              </p>
 
-            <p className="text-xs text-white/30">
-              {mediaWithUrls.length}{" "}
-              {mediaWithUrls.length === 1
-                ? "Media"
-                : "Media Files"}
-            </p>
-          </div>
-
-          {mediaWithUrls.length === 0 && (
-            <div className="rounded-3xl border border-dashed border-white/20 px-6 py-16 text-center">
-              <p className="text-sm text-white/50">
-                Belum ada gambar atau video untuk project ini.
+              <p className="text-lg font-medium">
+                Discover other projects.
               </p>
             </div>
-          )}
 
-          <div className="grid gap-6">
-            {mediaWithUrls.map((item, index) => (
-              <div
-                key={item.id}
-                className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]"
-              >
-                {item.signedUrl &&
-                  item.type === "image" && (
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={item.signedUrl}
-                        alt={
-                          item.title ||
-                          `${project.title} image ${index + 1}`
-                        }
-                        loading={
-                          index === 0 ? "eager" : "lazy"
-                        }
-                        className="h-auto w-full object-cover transition duration-700 group-hover:scale-[1.01]"
-                      />
-                    </div>
-                  )}
+            <Link
+              href="/work"
+              className="group inline-flex items-center justify-center gap-3 self-start rounded-full bg-[#ff5a1f] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#ff7040] sm:self-auto"
+            >
+              View All Projects
 
-                {item.signedUrl &&
-                  item.type === "video" && (
-                    <video
-                      src={item.signedUrl}
-                      controls
-                      preload="metadata"
-                      playsInline
-                      className="h-auto w-full"
-                    >
-                      Browser kamu tidak mendukung
-                      pemutaran video.
-                    </video>
-                  )}
-
-                {!item.signedUrl && (
-                  <div className="p-8 text-center text-sm text-red-400">
-                    Media gagal dimuat. Periksa path
-                    Storage.
-                  </div>
-                )}
-              </div>
-            ))}
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
           </div>
-        </section>
-
-        {/* Bottom Navigation */}
-        <div className="mt-16 border-t border-white/10 pt-8">
-          <Link
-            href="/work"
-            className="group inline-flex items-center gap-3 text-sm text-white/50 transition hover:text-[#ff5a1f]"
-          >
-            <span className="text-lg transition-transform group-hover:-translate-x-1">
-              ←
-            </span>
-
-            View All Projects
-          </Link>
-        </div>
+        </footer>
       </div>
     </main>
   );
