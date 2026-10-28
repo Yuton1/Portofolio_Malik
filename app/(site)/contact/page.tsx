@@ -69,56 +69,55 @@ export default function ContactPage() {
 
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
+  const [sending, setSending] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
+  
     setError("");
     setReady(false);
-
-    if (
-      !form.name.trim() ||
-      !form.email.trim() ||
-      !form.projectType ||
-      !form.message.trim()
-    ) {
-      setError("Please complete all required fields.");
-      return;
+    setSending(true);
+  
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+    
+      const result = await response.json();
+    
+      if (!response.ok) {
+        setError(
+          result.error ||
+            "Unable to send your message. Please try again."
+        );
+        return;
+      }
+    
+      setReady(true);
+    
+      setForm({
+        name: "",
+        email: "",
+        projectType: "",
+        budget: "",
+        message: "",
+      });
+    } catch {
+      setError(
+        "Could not connect to the email service. Please try again."
+      );
+    } finally {
+      setSending(false);
     }
-
-    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      form.email.trim()
-    );
-
-    if (!emailIsValid) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    const subject = encodeURIComponent(
-      `Project Inquiry — ${form.projectType}`
-    );
-
-    const body = encodeURIComponent(
-      [
-        `Hello Ahsan,`,
-        ``,
-        `I'd like to discuss a project with you.`,
-        ``,
-        `Name: ${form.name.trim()}`,
-        `Email: ${form.email.trim()}`,
-        `Project Type: ${form.projectType}`,
-        `Budget: ${form.budget || "Not specified"}`,
-        ``,
-        `Project Details:`,
-        form.message.trim(),
-      ].join("\n")
-    );
-
-    setReady(true);
-
-    window.location.href =
-      `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   }
+
 
   function openWhatsApp() {
     const message = encodeURIComponent(
@@ -428,25 +427,28 @@ export default function ContactPage() {
               {ready && (
                 <p
                   role="status"
-                  className="flex items-start gap-2 text-sm text-black/60 dark:text-white/60"
+                  className="flex items-start gap-2 rounded-xl border border-[#ff5a1f]/20 bg-[#ff5a1f]/5 p-3 text-sm"
                 >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#ff5a1f]" />
-                  Your email app should open with your message prepared.
-                  Please send it there to complete your inquiry.
+                  Your message was accepted by the email service. Thank you
+                  for reaching out!
                 </p>
               )}
 
               <button
                 type="submit"
-                className="group flex w-full items-center justify-center gap-3 rounded-full bg-[#ff5a1f] px-6 py-4 text-sm font-medium text-white transition hover:bg-[#e94b13] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a1f] focus-visible:ring-offset-2"
+                disabled={sending}
+                className="group flex w-full items-center justify-center gap-3 rounded-full bg-[#ff5a1f] px-6 py-4 text-sm font-medium text-white transition hover:bg-[#e94b13] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a1f] focus-visible:ring-offset-2"
               >
-                Prepare email
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                {sending ? "Sending message..." : "Send message"}
+
+                {!sending && (
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                )}
               </button>
 
               <p className="text-center text-xs leading-6 text-black/40 dark:text-white/40">
-                Submitting opens your default email application.
-                Your message is not sent automatically by this website.
+              Your details will be sent securely to the portfolio owner.
               </p>
             </form>
           </div>
