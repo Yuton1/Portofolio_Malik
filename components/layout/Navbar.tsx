@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
+import Image from "next/image";
 
 const navigation = [
   { label: "Home", href: "/" },
@@ -58,17 +59,15 @@ export function Navbar() {
           onClick={() => setIsMenuOpen(false)}
           className="group flex h-10 w-10 shrink-0 items-center justify-center"
         >
-          <span
-            className="
-              flex h-9 w-9 items-center justify-center
-              rounded-full border border-[#ff5a1f]
-              text-lg font-bold text-[#ff5a1f]
-              transition-transform duration-300
-              group-hover:rotate-12
-            "
-          >
-            A
-          </span>
+
+        <Image
+          src="/images/logo_pp.svg"
+          alt="Ahsan Malik Logo"
+          width={42}
+          height={42}
+          priority
+          className="h-10 w-10 object-contain"
+        />
         </Link>
 
         {/* Desktop Navigation */}
