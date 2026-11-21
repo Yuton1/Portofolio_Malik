@@ -15,11 +15,8 @@ import {
   Github,
 } from "lucide-react";
 
-const CONTACT_EMAIL = "hello@ahsanmalik.com";
-
-// Ganti dengan nomor WhatsApp kamu, format internasional tanpa + atau spasi.
-// Contoh format: 6281234567890
-const WHATSAPP_NUMBER = "628XXXXXXXXXX";
+const CONTACT_EMAIL = "mohahsanmalik1@gmail.com";
+const WHATSAPP_NUMBER = "+62-85749418875";
 
 const PROJECT_TYPES = [
   "Graphic Design",
@@ -41,7 +38,7 @@ const CONTACT_LINKS = [
   {
     label: "Instagram",
     value: "Connect on Instagram",
-    href: "https://instagram.com/",
+    href: "https://www.instagram.com/mex_aam?gwpx=Z2xzN213d3l4N294&utm_source=qr",
     icon: Instagram,
   },
   {
@@ -301,7 +298,7 @@ export default function ContactPage() {
                     onChange={(event) =>
                       setForm({ ...form, name: event.target.value })
                     }
-                    placeholder="John Doe"
+                    placeholder="Name"
                     className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
                   />
                 </div>
@@ -325,7 +322,7 @@ export default function ContactPage() {
                     onChange={(event) =>
                       setForm({ ...form, email: event.target.value })
                     }
-                    placeholder="john@example.com"
+                    placeholder="email@example.com"
                     className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
                   />
                 </div>
