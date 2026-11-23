@@ -66,3 +66,40 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* =========================================
+   PROJECT INQUIRY - PIXEL CURSOR EFFECT
+========================================= */
+
+.pixel-effect {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 90, 31, 0.65) 1.2px,
+    transparent 1.5px
+  );
+
+  background-size: 12px 12px;
+
+  mask-image: radial-gradient(
+    circle 140px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    black 0%,
+    transparent 100%
+  );
+
+  -webkit-mask-image: radial-gradient(
+    circle 140px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    black 0%,
+    transparent 100%
+  );
+}
+
+.group:hover .pixel-effect {
+  opacity: 1;
+}
