@@ -9,10 +9,10 @@ import { ThemeToggle } from "./ThemeToggle";
 import Image from "next/image";
 
 const navigation = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Project", href: "/work" },
-  { label: "Contact", href: "/contact" },
+  { label: "HOME", href: "/" },
+  { label: "ABOUT", href: "/about" },
+  { label: "PROJECT", href: "/work" },
+  { label: "CONTACT", href: "/contact" },
 ];
 
 function isActiveRoute(pathname: string, href: string) {
@@ -23,6 +23,67 @@ function isActiveRoute(pathname: string, href: string) {
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function LettersPullUp({
+  text,
+  className = "",
+}: {
+  text: string;
+  className?: string;
+}) {
+  const letters = text.split("");
+
+  return (
+    <motion.span
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      className={`inline-flex overflow-hidden ${className}`}
+    >
+      {letters.map((letter, index) => (
+        <span
+          key={`${letter}-${index}`}
+          className="relative inline-block overflow-hidden"
+        >
+          <motion.span
+            variants={{
+              rest: { y: 0 },
+              hover: {
+                y: "-100%",
+                transition: {
+                  duration: 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: index * 0.025,
+                },
+              },
+            }}
+            className="block whitespace-pre"
+          >
+            {letter === " " ? "\u00A0" : letter}
+          </motion.span>
+
+          <motion.span
+            aria-hidden="true"
+            variants={{
+              rest: { y: "100%" },
+              hover: {
+                y: 0,
+                transition: {
+                  duration: 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: index * 0.025,
+                },
+              },
+            }}
+            className="absolute inset-0 block whitespace-pre"
+          >
+            {letter === " " ? "\u00A0" : letter}
+          </motion.span>
+        </span>
+      ))}
+    </motion.span>
+  );
 }
 
 export function Navbar() {
@@ -39,6 +100,14 @@ export function Navbar() {
         mass: 0.8,
       };
 
+    const logoHover = shouldReduceMotion
+    ? {}
+    : {
+        scale: 1.08,
+        y: -3,
+        rotate: -6,
+      };
+
   return (
     <header className="fixed left-0 top-0 z-50 w-full px-4 pt-4 md:px-8 md:pt-6">
       <nav
@@ -52,23 +121,57 @@ export function Navbar() {
           md:px-8
         "
       >
-        {/* Logo */}
-        <Link
-          href="/"
-          aria-label="Ahsan Malik homepage"
-          onClick={() => setIsMenuOpen(false)}
-          className="group flex h-10 w-10 shrink-0 items-center justify-center"
+        {/* Animated Logo */}
+        <motion.div
+          whileHover={logoHover}
+          whileTap={{ scale: 0.94 }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 15,
+          }}
+          className="relative shrink-0"
         >
+          <Link
+            href="/"
+            aria-label="Ahsan Malik homepage"
+            onClick={() => setIsMenuOpen(false)}
+            className="
+              group relative flex h-11 w-11
+              items-center justify-center rounded-full
+              outline-none
+            "
+          >
+            {/* Orange Glow */}
+            <motion.span
+              className="
+                absolute inset-0 rounded-full
+                bg-[#ff5a1f]/0 blur-xl
+              "
+              whileHover={
+                shouldReduceMotion
+                  ? undefined
+                  : { backgroundColor: "rgba(255, 90, 31, 0.3)" }
+              }
+              transition={{ duration: 0.3 }}
+            />
 
-        <Image
-          src="/images/logo_pp.svg"
-          alt="Ahsan Malik Logo"
-          width={42}
-          height={42}
-          priority
-          className="h-10 w-10 object-contain"
-        />
-        </Link>
+            {/* Logo SVG */}
+            <Image
+              src="/images/logo_pp.svg"
+              alt="Ahsan Malik Logo"
+              width={42}
+              height={42}
+              priority
+              className="
+                relative z-10 h-10 w-10
+                object-contain
+                transition-[filter] duration-300
+                group-hover:drop-shadow-[0_0_8px_rgba(255,90,31,0.35)]
+              "
+            />
+          </Link>
+        </motion.div>
 
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-1 md:flex">
@@ -99,7 +202,7 @@ export function Navbar() {
                   />
                 )}
 
-                <span className="relative z-10">{item.label}</span>
+                <span className="relative z-10"> <LettersPullUp text={item.label} /> </span>
               </Link>
             );
           })}
@@ -200,7 +303,7 @@ export function Navbar() {
                   />
                 )}
 
-                <span className="relative z-10">{item.label}</span>
+                <span className="relative z-10"> <LettersPullUp text={item.label} /> </span>
               </Link>
             );
           })}
