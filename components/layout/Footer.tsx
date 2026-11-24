@@ -1,38 +1,75 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const footerLinks = [
-  { label: "HOME", href: "/" },
-  { label: "WORK", href: "/work" },
-  { label: "ABOUT", href: "/about" },
-  { label: "CONTACT", href: "/contact" },
+  { label: "Home", href: "/" },
+  { label: "Work", href: "/work" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
-function LettersPullUp({ text }: { text: string }) {
+function LettersPullUp({
+  text,
+  className = "",
+}: {
+  text: string;
+  className?: string;
+}) {
+  const letters = text.split("");
+
   return (
-    <span
-      aria-label={text}
-      className="group inline-flex cursor-pointer overflow-hidden"
+    <motion.span
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      className={`inline-flex overflow-hidden ${className}`}
     >
-      {text.split("").map((letter, index) => (
+      {letters.map((letter, index) => (
         <span
           key={`${letter}-${index}`}
-          aria-hidden="true"
-          className="inline-flex overflow-hidden"
+          className="relative inline-block overflow-hidden"
         >
-          <span
-            className="
-              flex flex-col
-              transition-transform duration-500
-              ease-[cubic-bezier(0.22,1,0.36,1)]
-              group-hover:-translate-y-full
-            "
-            style={{ transitionDelay: `${index * 25}ms` }}
+          {/* ORIGINAL LETTER */}
+          <motion.span
+            variants={{
+              rest: { y: 0 },
+              hover: {
+                y: "-100%",
+                transition: {
+                  duration: 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: index * 0.025,
+                },
+              },
+            }}
+            className="block whitespace-pre"
           >
-            <span>{letter}</span>
-          </span>
+            {letter === " " ? "\u00A0" : letter}
+          </motion.span>
+
+          {/* ANIMATED LETTER */}
+          <motion.span
+            aria-hidden="true"
+            variants={{
+              rest: { y: "100%" },
+              hover: {
+                y: 0,
+                transition: {
+                  duration: 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: index * 0.025,
+                },
+              },
+            }}
+            className="absolute inset-0 block whitespace-pre"
+          >
+            {letter === " " ? "\u00A0" : letter}
+          </motion.span>
         </span>
       ))}
-    </span>
+    </motion.span>
   );
 }
 
@@ -86,7 +123,7 @@ export function Footer() {
         </nav>
       </div>
 
-      {/* BIG TYPOGRAPHY */}
+      {/* BIG TYPOGRAPHY - STATIC */}
       <div className="relative h-[35vw] min-h-[180px] max-h-[520px] overflow-hidden">
         <div
           className="

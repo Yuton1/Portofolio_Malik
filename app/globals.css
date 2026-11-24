@@ -103,3 +103,30 @@
 .group:hover .pixel-effect {
   opacity: 1;
 }
+
+/* CLIENT LOGO MARQUEE */
+
+.client-marquee-track {
+  animation: client-marquee-scroll 35s linear infinite;
+  will-change: transform;
+}
+
+.client-marquee:hover .client-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes client-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-marquee-track {
+    animation: none;
+  }
+}
