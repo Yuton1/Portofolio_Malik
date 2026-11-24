@@ -5,6 +5,7 @@ import "./globals.css";
 import { ClientMarquee } from "@/components/layout/ClientMarquee";
 import { Footer } from "@/components/layout/Footer";
 
+
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
@@ -39,14 +40,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <ClientMarquee />
         </ThemeProvider>
       </body>
     </html>
   );
-  <>
-  {children}
-  <ClientMarquee />
-  <Footer />
-</>
 }
 
