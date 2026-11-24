@@ -232,7 +232,7 @@ export default function HomePage() {
               className="
                 group mt-10
                 inline-flex items-center gap-3
-                text-lg font-medium
+                text-lg font-medium 
                 text-black/70
                 transition-colors duration-300
                 hover:text-black
