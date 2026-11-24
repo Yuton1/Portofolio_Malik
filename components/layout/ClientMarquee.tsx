@@ -3,12 +3,20 @@
 import Image from "next/image";
 
 const clients = [
-  { name: "Client 1", logo: "/images/clients/client-1.svg" },
-  { name: "Client 2", logo: "/images/clients/client-2.svg" },
-  { name: "Client 3", logo: "/images/clients/client-3.svg" },
-  { name: "Client 4", logo: "/images/clients/client-4.svg" },
-  { name: "Client 5", logo: "/images/clients/client-5.svg" },
-  { name: "Client 6", logo: "/images/clients/client-6.svg" },
+  { name: "Client 1", logo: "/images/clients/client-01.svg" },
+  { name: "Client 2", logo: "/images/clients/client-02.svg" },
+  { name: "Client 3", logo: "/images/clients/client-03.svg" },
+  { name: "Client 4", logo: "/images/clients/client-04.svg" },
+  { name: "Client 5", logo: "/images/clients/client-05.svg" },
+  { name: "Client 6", logo: "/images/clients/client-06.svg" },
+  { name: "Client 1", logo: "/images/clients/client-07.svg" },
+  { name: "Client 2", logo: "/images/clients/client-08.svg" },
+  { name: "Client 3", logo: "/images/clients/client-09.svg" },
+  { name: "Client 4", logo: "/images/clients/client-10.svg" },
+  { name: "Client 5", logo: "/images/clients/client-11.svg" },
+  { name: "Client 6", logo: "/images/clients/client-12.svg" },
+  { name: "Client 1", logo: "/images/clients/client-13.svg" },
+  { name: "Client 2", logo: "/images/clients/client-14.svg" },
 ];
 
 export function ClientMarquee() {
