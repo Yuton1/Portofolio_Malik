@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ClientMarquee } from "@/components/layout/ClientMarquee";
 
 const footerLinks = [
   { label: "HOME", href: "/" },
@@ -75,75 +76,78 @@ function LettersPullUp({
 
 export function Footer() {
   return (
-    <footer
-      className="
-        overflow-hidden
-        border-t border-black/10
-        bg-white
-        pt-8
-        text-[#1c1c1c]
-        transition-colors duration-300
-        dark:border-white/10
-        dark:bg-[#1c1c1c]
-        dark:text-white
-      "
-    >
-      {/* TOP FOOTER */}
-      <div
+    <>
+      <ClientMarquee />
+      <footer
         className="
-          mx-auto flex max-w-[1400px]
-          flex-col gap-5
-          px-6 pb-8
-          text-sm
-          text-black/50
+          overflow-hidden
+          border-t border-black/10
+          bg-white
+          pt-8
+          text-[#1c1c1c]
           transition-colors duration-300
-          dark:text-white/50
-          md:flex-row
-          md:items-center
-          md:justify-between
-          md:px-10
+          dark:border-white/10
+          dark:bg-[#1c1c1c]
+          dark:text-white
         "
       >
-        <p>© 2026 Ahsan Malik. All rights reserved.</p>
-
-        {/* NAVIGATION */}
-        <nav className="flex flex-wrap gap-5">
-          {footerLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="
-                transition-colors duration-300
-                hover:text-[#ff5a1f]
-              "
-            >
-              <LettersPullUp text={item.label} />
-            </Link>
-          ))}
-        </nav>
-      </div>
-
-      {/* BIG TYPOGRAPHY - STATIC */}
-      <div className="relative h-[35vw] min-h-[180px] max-h-[520px] overflow-hidden">
+        {/* TOP FOOTER */}
         <div
           className="
-            absolute left-1/2 top-0
-            w-max
-            -translate-x-1/2
-            translate-y-[10%]
-            whitespace-nowrap
-            text-[35vw]
-            font-semibold
-            uppercase
-            leading-[0.75]
-            tracking-[-0.085em]
-            text-[#1c1c1c]
-            dark:text-[#e5e5e5]
+            mx-auto flex max-w-[1400px]
+            flex-col gap-5
+            px-6 pb-8
+            text-sm
+            text-black/50
+            transition-colors duration-300
+            dark:text-white/50
+            md:flex-row
+            md:items-center
+            md:justify-between
+            md:px-10
           "
         >
-          MALIK
+          <p>© 2026 Ahsan Malik. All rights reserved.</p>
+
+          {/* NAVIGATION */}
+          <nav className="flex flex-wrap gap-5">
+            {footerLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="
+                  transition-colors duration-300
+                  hover:text-[#ff5a1f]
+                "
+              >
+                <LettersPullUp text={item.label} />
+              </Link>
+            ))}
+          </nav>
         </div>
-      </div>
-    </footer>
+
+        {/* BIG TYPOGRAPHY - STATIC */}
+        <div className="relative h-[35vw] min-h-[180px] max-h-[520px] overflow-hidden">
+          <div
+            className="
+              absolute left-1/2 top-0
+              w-max
+              -translate-x-1/2
+              translate-y-[10%]
+              whitespace-nowrap
+              text-[35vw]
+              font-semibold
+              uppercase
+              leading-[0.75]
+              tracking-[-0.085em]
+              text-[#1c1c1c]
+              dark:text-[#e5e5e5]
+            "
+          >
+            MALIK
+          </div>
+        </div>
+      </footer>
+    </>
   );
 }

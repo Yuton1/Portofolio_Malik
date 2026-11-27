@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import { ClientMarquee } from "@/components/layout/ClientMarquee";
-import { Footer } from "@/components/layout/Footer";
-
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -16,7 +13,8 @@ export const metadata: Metadata = {
     default: "Ahsan Malik — Creative Designer",
     template: "%s | Ahsan Malik",
   },
-  description: "Portfolio of Ahsan Malik — Graphic Designer, Motion Designer, and Web Developer.",
+  description:
+    "Portfolio of Ahsan Malik — Graphic Designer, Motion Designer, and Web Developer.",
 };
 
 const geistSans = Geist({
@@ -40,10 +38,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <ClientMarquee />
         </ThemeProvider>
       </body>
     </html>
   );
 }
-
