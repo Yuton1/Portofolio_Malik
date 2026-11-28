@@ -1,23 +1,16 @@
-
 "use client";
 
 import { useState, type FormEvent } from "react";
-import Link from "next/link";
 import {
-  ArrowDownRight,
-  ArrowRight,
   ArrowUpRight,
   CheckCircle2,
   Mail,
-  MessageCircle,
   Instagram,
   Linkedin,
   Github,
 } from "lucide-react";
-import { ProjectInquiryCard } from "@/components/ui/ProjectInquiryCard";
 
 const CONTACT_EMAIL = "mohahsanmalik1@gmail.com";
-const WHATSAPP_NUMBER = "+62-85749418875";
 
 const PROJECT_TYPES = [
   "Graphic Design",
@@ -69,12 +62,12 @@ export default function ContactPage() {
     event: React.MouseEvent<HTMLDivElement>
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
-  
+
     event.currentTarget.style.setProperty(
       "--mouse-x",
       `${event.clientX - rect.left}px`
     );
-  
+
     event.currentTarget.style.setProperty(
       "--mouse-y",
       `${event.clientY - rect.top}px`
@@ -85,16 +78,15 @@ export default function ContactPage() {
   const [ready, setReady] = useState(false);
   const [sending, setSending] = useState(false);
 
-  
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-  
+
     setError("");
     setReady(false);
     setSending(true);
-  
+
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -103,9 +95,9 @@ export default function ContactPage() {
         },
         body: JSON.stringify(form),
       });
-    
+
       const result = await response.json();
-    
+
       if (!response.ok) {
         setError(
           result.error ||
@@ -113,9 +105,9 @@ export default function ContactPage() {
         );
         return;
       }
-    
+
       setReady(true);
-    
+
       setForm({
         name: "",
         email: "",
@@ -132,110 +124,22 @@ export default function ContactPage() {
     }
   }
 
-
-  function openWhatsApp() {
-    const message = encodeURIComponent(
-      "Hi Ahsan! I'd like to discuss a creative project with you."
-    );
-
-    window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  }
-
   return (
     <main className="overflow-hidden">
-      {/* HERO */}
-      <section className="px-5 pb-14 pt-20 sm:px-8 sm:pb-20 sm:pt-28 lg:px-12 lg:pt-36">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-8 flex items-center gap-3">
-            <span className="h-2 w-2 rounded-full bg-[#ff5a1f]" />
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/55 dark:text-white/55">
-              Contact
-            </p>
-          </div>
-
-          <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <h1 className="max-w-5xl text-5xl font-semibold leading-[0.98] tracking-[-0.06em] sm:text-7xl lg:text-8xl">
-                Have an idea?
-                <span className="block text-[#ff5a1f]">
-                  Let&apos;s talk.
-                </span>
-              </h1>
-
-              <p className="mt-7 max-w-2xl text-base leading-8 text-black/60 dark:text-white/60 sm:text-lg">
-                Have a project in mind or looking for a creative
-                partner? Tell me what you&apos;re working on.
-                Let&apos;s explore how we can bring your ideas
-                to life.
-              </p>
-            </div>
-
-            <Link
-              href="/work"
-              className="group inline-flex w-fit items-center gap-2 text-sm font-medium transition hover:text-[#ff5a1f]"
-            >
-              Explore selected work
-              <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:translate-y-1" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* CONTACT CONTENT */}
-      <section className="px-5 pb-20 sm:px-8 sm:pb-28 lg:px-12">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
-          {/* LEFT COLUMN */}
-          <aside>
-            <div className="rounded-3xl bg-[#1c1c1c] p-6 text-white sm:p-8">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#ff5a1f]">
-                Get in touch
-              </p>
-
-              <h2 className="mt-5 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
-                Let&apos;s make something great.
-              </h2>
-
-              <p className="mt-4 text-sm leading-7 text-white/60">
-                Share your ideas, project requirements, or
-                collaboration opportunities. I&apos;ll be glad
-                to hear from you.
-              </p>
-
-              <div className="mt-8 border-t border-white/15 pt-6">
-                <p className="mb-3 text-xs text-white/45">
-                  Prefer email?
-                </p>
-
-                <a
-                  href={`mailto:${CONTACT_EMAIL}`}
-                  className="group inline-flex max-w-full items-center gap-2 break-all text-sm font-medium transition hover:text-[#ff5a1f]"
-                >
-                  {CONTACT_EMAIL}
-                  <ArrowUpRight className="h-4 w-4 shrink-0" />
-                </a>
-              </div>
-
-              <div className="mt-6">
-                <button
-                  type="button"
-                  onClick={openWhatsApp}
-                  className="group flex w-full items-center justify-between gap-3 rounded-full bg-[#ff5a1f] px-5 py-4 text-left text-sm font-medium text-white transition hover:bg-[#e94b13]"
-                >
-                  <span className="flex items-center gap-3">
-                    <MessageCircle className="h-5 w-5" />
-                    Chat on WhatsApp
-                  </span>
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </button>
-              </div>
-            </div>
+      <section className="px-5 pb-20 pt-32 sm:px-8 sm:pb-28 lg:px-12 lg:pt-36">
+        <div className="mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-16">
+          {/* LEFT COLUMN: HEADING + FIND ME ONLINE */}
+          <div className="flex flex-col">
+            <h1 className="text-8xl font-semibold leading-[0.95] tracking-[-0.06em] sm:text-8xl lg:text-[clamp(4.25rem,6.5vw,7rem)]">
+              Have an
+              <br />
+              idea?
+              <br />
+              Let&apos;s talk.
+            </h1>
 
             {/* SOCIAL LINKS */}
-            <div className="mt-10">
+            <div className="mt-14 max-w-md lg:mt-20">
               <h3 className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-black/45 dark:text-white/45">
                 Find me online
               </h3>
@@ -277,222 +181,196 @@ export default function ContactPage() {
                 })}
               </div>
             </div>
-          </aside>
+          </div>
 
           {/* RIGHT COLUMN: FORM */}
-          
           <div
-          onMouseMove={handlePixelMove}
-          className="group relative overflow-hidden rounded-3xl border border-black/10 p-5 dark:border-white/10 dark:bg-[#1c1c1c]sm:p-8 lg:p-10">
-
-          {/* PIXEL EFFECT */}
-          <div className="pixel-effect" aria-hidden="true" />
-
-          {/* FORM CONTENT */}
-          <div className="relative z-10">
-
-            <div className="mb-8">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#ff5a1f]">
-                Project Inquiry
-              </p>
-
-              <h2 className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl">
-                Tell me about your project.
-              </h2>
-
-              <p className="mt-3 text-sm leading-7 text-black/55 dark:text-white/55">
-                Fields marked with * are required.
-              </p>
-            </div>
-              <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid gap-6 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-medium"
-                  >
-                    Your name *
-                  </label>
-
-                  <input
-                    id="name"
-                    name="name"
-                    autoComplete="name"
-                    required
-                    maxLength={100}
-                    value={form.name}
-                    onChange={(event) =>
-                      setForm({ ...form, name: event.target.value })
-                    }
-                    placeholder="Name"
-                    className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-2 block text-sm font-medium"
-                  >
-                    Email address *
-                  </label>
-
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    maxLength={254}
-                    value={form.email}
-                    onChange={(event) =>
-                      setForm({ ...form, email: event.target.value })
-                    }
-                    placeholder="email@example.com"
-                    className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="projectType"
-                  className="mb-2 block text-sm font-medium"
-                >
-                  What do you need? *
-                </label>
-
-                <select
-                  id="projectType"
-                  name="projectType"
-                  required
-                  value={form.projectType}
-                  onChange={(event) =>
-                    setForm({
-                      ...form,
-                      projectType: event.target.value,
-                    })
-                  }
-                  className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:[color-scheme:dark]"
-                >
-                  <option value="">Select a project type</option>
-                  {PROJECT_TYPES.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="budget"
-                  className="mb-2 block text-sm font-medium"
-                >
-                  Estimated budget{" "}
-                  <span className="font-normal text-black/40 dark:text-white/40">
-                    (optional)
-                  </span>
-                </label>
-
-                <select
-                  id="budget"
-                  name="budget"
-                  value={form.budget}
-                  onChange={(event) =>
-                    setForm({ ...form, budget: event.target.value })
-                  }
-                  className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:[color-scheme:dark]"
-                >
-                  <option value="">Prefer not to say</option>
-                  <option value="Under $100">Under $100</option>
-                  <option value="$100–$300">$100–$300</option>
-                  <option value="$300–$500">$300–$500</option>
-                  <option value="$500–$1,000">$500–$1,000</option>
-                  <option value="$1,000+">$1,000+</option>
-                  <option value="To be discussed">To be discussed</option>
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  className="mb-2 block text-sm font-medium"
-                >
-                  Project details *
-                </label>
-
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  minLength={10}
-                  maxLength={5000}
-                  rows={6}
-                  value={form.message}
-                  onChange={(event) =>
-                    setForm({ ...form, message: event.target.value })
-                  }
-                  placeholder="Tell me about your idea, goals, deliverables, and timeline..."
-                  className="w-full resize-y rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm leading-7 outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
-                />
-              </div>
-
-              {error && (
-                <p
-                  role="alert"
-                  className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-sm text-red-500"
-                >
-                  {error}
-                </p>
-              )}
-
-              {ready && (
-                <p
-                  role="status"
-                  className="flex items-start gap-2 rounded-xl border border-[#ff5a1f]/20 bg-[#ff5a1f]/5 p-3 text-sm"
-                >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#ff5a1f]" />
-                  Your message was accepted by the email service. Thank you
-                  for reaching out!
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={sending}
-                className="group flex w-full items-center justify-center gap-3 rounded-full bg-[#ff5a1f] px-6 py-4 text-sm font-medium text-white transition hover:bg-[#e94b13] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a1f] focus-visible:ring-offset-2"
-              >
-                {sending ? "Sending message..." : "Send message"}
-
-                {!sending && (
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                )}
-              </button>
-
-              <p className="text-center text-xs leading-6 text-black/40 dark:text-white/40">
-              Your details will be sent securely to the portfolio owner.
-              </p>
-            </form>
-          </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BOTTOM CTA */}
-      <section className="border-t border-black/10 px-5 py-10 dark:border-white/10 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <p className="text-sm text-black/50 dark:text-white/50">
-            Have a quick question? Feel free to reach out.
-          </p>
-
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className="inline-flex w-fit items-center gap-2 text-sm font-medium transition hover:text-[#ff5a1f]"
+            onMouseMove={handlePixelMove}
+            className="group relative overflow-hidden rounded-3xl border border-black/10 p-6 dark:border-white/10 dark:bg-[#1c1c1c] sm:p-8 lg:p-10"
           >
-            Send me an email
-            <ArrowUpRight className="h-4 w-4" />
-          </a>
+            {/* PIXEL EFFECT */}
+            <div className="pixel-effect" aria-hidden="true" />
+
+            {/* FORM CONTENT */}
+            <div className="relative z-10">
+              <div className="mb-8">
+                <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                  Tell me About Project
+                </h2>
+
+                <p className="mt-3 text-sm leading-7 text-black/55 dark:text-white/55">
+                  Fields marked with * are required.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="mb-2 block text-sm font-medium"
+                    >
+                      Your name *
+                    </label>
+
+                    <input
+                      id="name"
+                      name="name"
+                      autoComplete="name"
+                      required
+                      maxLength={100}
+                      value={form.name}
+                      onChange={(event) =>
+                        setForm({ ...form, name: event.target.value })
+                      }
+                      placeholder="name"
+                      className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="mb-2 block text-sm font-medium"
+                    >
+                      Email address *
+                    </label>
+
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      maxLength={254}
+                      value={form.email}
+                      onChange={(event) =>
+                        setForm({ ...form, email: event.target.value })
+                      }
+                      placeholder="Email@example.com"
+                      className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="projectType"
+                    className="mb-2 block text-sm font-medium"
+                  >
+                    What do you need? *
+                  </label>
+
+                  <select
+                    id="projectType"
+                    name="projectType"
+                    required
+                    value={form.projectType}
+                    onChange={(event) =>
+                      setForm({
+                        ...form,
+                        projectType: event.target.value,
+                      })
+                    }
+                    className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:[color-scheme:dark]"
+                  >
+                    <option value="">Select a service</option>
+                    {PROJECT_TYPES.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="budget"
+                    className="mb-2 block text-sm font-medium"
+                  >
+                    Estimated budget{" "}
+                    <span className="font-normal text-black/40 dark:text-white/40">
+                      (optional)
+                    </span>
+                  </label>
+
+                  <select
+                    id="budget"
+                    name="budget"
+                    value={form.budget}
+                    onChange={(event) =>
+                      setForm({ ...form, budget: event.target.value })
+                    }
+                    className="w-full rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm outline-none transition focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:[color-scheme:dark]"
+                  >
+                    <option value="">$</option>
+                    <option value="Under $100">Under $100</option>
+                    <option value="$100–$300">$100–$300</option>
+                    <option value="$300–$500">$300–$500</option>
+                    <option value="$500–$1,000">$500–$1,000</option>
+                    <option value="$1,000+">$1,000+</option>
+                    <option value="To be discussed">To be discussed</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="mb-2 block text-sm font-medium"
+                  >
+                    Project details *
+                  </label>
+
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    minLength={10}
+                    maxLength={5000}
+                    rows={6}
+                    value={form.message}
+                    onChange={(event) =>
+                      setForm({ ...form, message: event.target.value })
+                    }
+                    placeholder="Briefly describe your idea, goals, or timeline......"
+                    className="w-full resize-y rounded-xl border border-black/15 bg-transparent px-4 py-3.5 text-sm leading-7 outline-none transition placeholder:text-black/30 focus:border-[#ff5a1f] focus:ring-2 focus:ring-[#ff5a1f]/10 dark:border-white/15 dark:placeholder:text-white/25"
+                  />
+                </div>
+
+                {error && (
+                  <p
+                    role="alert"
+                    className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-sm text-red-500"
+                  >
+                    {error}
+                  </p>
+                )}
+
+                {ready && (
+                  <p
+                    role="status"
+                    className="flex items-start gap-2 rounded-xl border border-[#ff5a1f]/20 bg-[#ff5a1f]/5 p-3 text-sm"
+                  >
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#ff5a1f]" />
+                    Your message was accepted by the email service. Thank you
+                    for reaching out!
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="group flex w-full items-center justify-center gap-3 rounded-xl bg-[#ff5a1f] px-6 py-4 text-sm font-medium text-white transition hover:bg-[#e94b13] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a1f] focus-visible:ring-offset-2"
+                >
+                  {sending ? "Sending message..." : "Send message"}
+
+                  {!sending && (
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </section>
     </main>
