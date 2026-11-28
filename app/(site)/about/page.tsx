@@ -111,6 +111,185 @@ function ScrollRevealText({
   );
 }
 
+const experienceStats = [
+  {
+    number: "50+",
+    title: "PROJECTS DELIVERED",
+    description:
+      "VISUAL IDENTITIES, MOTION GRAPHICS, AND WEBSITES CRAFTED FOR BRANDS & CREATORS.",
+    stack: { x: "162%", y: 0, rotate: 0, zIndex: 40 },
+    spreadY: -36,
+  },
+  {
+    number: "95%",
+    title: "CLIENT SATISFACTION",
+    description:
+      "BUILT ON CLEAR COMMUNICATION, ATTENTION TO DETAIL, AND FUNCTIONAL DELIVERY.",
+    stack: { x: "54%", y: -6, rotate: -22, zIndex: 30 },
+    spreadY: 44,
+  },
+  {
+    number: "4+",
+    title: "YEARS EXPERIENCE",
+    description:
+      "BRIDGING VISUAL COMMUNICATION, USER-CENTERED UI/UX, AND MODERN WEB CODE.",
+    stack: { x: "-54%", y: -10, rotate: -9, zIndex: 20 },
+    spreadY: -36,
+  },
+  {
+    number: "05",
+    title: "CORE DISCIPLINES",
+    description:
+      "GRAPHIC DESIGN, MOTION, VIDEO EDITING, UI/UX DESIGN, AND WEB DEVELOPMENT.",
+    stack: { x: "-162%", y: 6, rotate: 20, zIndex: 10 },
+    spreadY: 44,
+  },
+];
+
+function StatCardInner({
+  stat,
+}: {
+  stat: (typeof experienceStats)[number];
+}) {
+  return (
+    <>
+      {/* Top-left metallic sheen */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(115% 95% at 8% 6%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.06) 34%, rgba(13,13,13,0.92) 75%)",
+        }}
+      />
+
+      {/* Inset crosshair frame lines */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-6 h-px bg-white/15"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-6 h-px bg-white/15"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-6 w-px bg-white/15"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-6 w-px bg-white/15"
+      />
+
+      {/* Glowing dot at top-right intersection */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute right-6 top-6 h-1.5 w-1.5 -translate-y-1/2 translate-x-1/2 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.85)]"
+      />
+
+      {/* Card content */}
+      <div className="relative z-10 flex h-full flex-col justify-center px-2 py-4">
+        <p className="text-5xl font-bold leading-none tracking-[-0.04em] text-white/65 xl:text-6xl">
+          {stat.number}
+        </p>
+
+        <h3 className="mt-3 text-xl font-medium uppercase leading-[1.08] tracking-[-0.02em] text-white/55 xl:text-2xl">
+          {stat.title}
+        </h3>
+
+        <p className="mt-4 text-[10px] font-medium uppercase leading-relaxed tracking-[0.04em] text-white/40 xl:text-[11px]">
+          {stat.description}
+        </p>
+      </div>
+    </>
+  );
+}
+
+function StatCardItem({
+  stat,
+  progress,
+  shouldReduceMotion,
+}: {
+  stat: (typeof experienceStats)[number];
+  progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  shouldReduceMotion: boolean | null;
+}) {
+  const x = useTransform(
+    progress,
+    [0, 1],
+    [shouldReduceMotion ? "0%" : stat.stack.x, "0%"]
+  );
+  const y = useTransform(
+    progress,
+    [0, 1],
+    [shouldReduceMotion ? stat.spreadY : stat.stack.y, stat.spreadY]
+  );
+  const rotate = useTransform(
+    progress,
+    [0, 1],
+    [shouldReduceMotion ? 0 : stat.stack.rotate, 0]
+  );
+
+  return (
+    <motion.div
+      style={{
+        x,
+        y,
+        rotate,
+        zIndex: stat.stack.zIndex,
+      }}
+      className="relative aspect-[1/1.05] w-full overflow-hidden rounded-2xl border border-white/15 bg-[#121212] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.65)]"
+    >
+      <StatCardInner stat={stat} />
+    </motion.div>
+  );
+}
+
+function StatistikPengalaman() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.85", "center 0.5"],
+  });
+
+  return (
+    <section
+      id="statistik-pengalaman"
+      aria-label="statistik pengalaman"
+      className="border-b border-white/15 bg-[#1c1c1c] px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-40"
+    >
+      {/* STATISTIK PENGALAMAN */}
+      <div ref={containerRef} className="mx-auto max-w-[1600px]">
+        {/* Desktop: stacked -> staggered 4 columns on scroll */}
+        <div className="hidden lg:grid lg:grid-cols-4 lg:items-center lg:gap-8 xl:gap-10">
+          {experienceStats.map((stat) => (
+            <StatCardItem
+              key={stat.title}
+              stat={stat}
+              progress={scrollYProgress}
+              shouldReduceMotion={shouldReduceMotion}
+            />
+          ))}
+        </div>
+
+        {/* Mobile & Tablet: clean responsive grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:hidden">
+          {experienceStats.map((stat) => (
+            <div
+              key={stat.title}
+              className="relative aspect-[1/1.05] w-full overflow-hidden rounded-2xl border border-white/15 bg-[#121212] p-7 shadow-[0_24px_60px_rgba(0,0,0,0.65)]"
+            >
+              <StatCardInner stat={stat} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function AboutPage() {
   const shouldReduceMotion = useReducedMotion();
 
@@ -233,6 +412,9 @@ export default function AboutPage() {
 
         </div>
       </section>
+
+      {/* STATISTIK PENGALAMAN */}
+      <StatistikPengalaman />
 
       {/* DISCIPLINES */}
       <section className="px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
