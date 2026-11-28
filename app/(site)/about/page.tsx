@@ -130,7 +130,7 @@ export default function AboutPage() {
   };
 
   return (
-    <main className="overflow-hidden bg-[#0d0d0d] text-white">
+    <main className="overflow-hidden bg-[#0D0D0D] text-white">
 
       {/* ABOUT INTRO */}
       <section className="relative min-h-screen border-b border-white/15 px-5 pb-20 pt-32 sm:px-8 lg:px-12 lg:pt-36">
@@ -196,33 +196,36 @@ export default function AboutPage() {
               </div>
 
               {/* Image caption */}
-              <div className="mt-5 flex items-start justify-between gap-4 border-t border-white/20 pt-5">
-
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-wide">
-                    Ahsan Malik
+              <div className="mt-6 divide-y divide-white/25 border-y border-white/25 bg-[#0D0D0D]">
+                <div className="grid grid-cols-[1.15fr_0.85fr] items-center gap-4 py-6">
+                  <p className="text-sm font-semibold tracking-tight text-white sm:text-base">
+                    Multidisciplinary Designer
                   </p>
 
-                  <p className="mt-1 text-xs uppercase tracking-[0.15em] text-white/45">
-                    Graphic Designer & Creative
-                  </p>
+                  <div>
+                    <p className="text-5xl font-bold leading-none tracking-[-0.04em] text-white">
+                      4+
+                    </p>
+                    <p className="mt-2 text-xs leading-snug text-white/80 sm:text-sm">
+                      Years of design experience
+                    </p>
+                  </div>
                 </div>
 
-                <span className="text-xs text-[#ff5a1f]">
-                  01 / ABOUT
-                </span>
+                <div className="grid grid-cols-[1.15fr_0.85fr] items-center gap-4 py-6">
+                  <p className="text-sm font-semibold tracking-tight text-white sm:text-base">
+                    Creative Developer
+                  </p>
 
-              </div>
-
-              {/* Experience */}
-              <div className="mt-10 border-t border-white/20 pt-6">
-                <p className="text-5xl font-semibold tracking-[-0.06em]">
-                  4+
-                </p>
-
-                <p className="mt-2 text-xs uppercase tracking-[0.15em] text-white/45">
-                  Years of design experience
-                </p>
+                  <div>
+                    <p className="text-5xl font-bold leading-none tracking-[-0.04em] text-white">
+                      3+
+                    </p>
+                    <p className="mt-2 text-xs leading-snug text-white/80 sm:text-sm">
+                      Where Creativity Meets Technology
+                    </p>
+                  </div>
+                </div>
               </div>
 
             </div>
