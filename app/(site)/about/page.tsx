@@ -1,5 +1,14 @@
 
+"use client";
 import Link from "next/link";
+import Image from "next/image";
+import { useRef } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import {
   ArrowDownRight,
   ArrowRight,
@@ -71,96 +80,154 @@ const software = [
   },
 ];
 
-export default function AboutPage() {
+function ScrollRevealText({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useRef<HTMLParagraphElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.9", "start 0.35"],
+  });
+
+  const color = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["#666666", "#ffffff"]
+  );
+
   return (
-    <main className="overflow-hidden">
-      {/* HERO */}
-      <section className="px-5 pb-20 pt-20 sm:px-8 sm:pb-28 sm:pt-28 lg:px-12 lg:pt-36">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 flex items-center gap-3">
-            <span className="h-2 w-2 rounded-full bg-[#ff5a1f]" />
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-black/55 dark:text-white/55">
-              About Me
-            </p>
+    <motion.p
+      ref={ref}
+      style={{ color }}
+      className={className}
+    >
+      {children}
+    </motion.p>
+  );
+}
+
+export default function AboutPage() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const fadeUp = {
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 35,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0 : 0.8,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
+  };
+
+  return (
+    <main className="overflow-hidden bg-[#0d0d0d] text-white">
+
+      {/* ABOUT INTRO */}
+      <section className="relative min-h-screen border-b border-white/15 px-5 pb-20 pt-32 sm:px-8 lg:px-12 lg:pt-36">
+
+        <div className="mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-[1.45fr_0.55fr] lg:gap-16">
+
+          {/* LEFT CONTENT */}
+          <div className="flex flex-col">
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: 0.1 }}
+            >
+              <h1 className="max-w-[1050px] text-[clamp(2.4rem,5.5vw,6.5rem)] font-semibold uppercase leading-[0.91] tracking-[-0.065em]">
+                I&apos;m a multidisciplinary creative from Indonesia, working across graphic design, motion design, video editing, UI/UX, and web development to create meaningful visuals and engaging digital experiences.
+              </h1>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: 0.25 }}
+              className="mt-16 max-w-[1000px] sm:mt-24"
+            >
+              <h2 className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-[#ff5a1f]">
+                MY APPROACH
+              </h2>
+
+              <ScrollRevealText className="text-[clamp(1.8rem,4vw,4.5rem)] font-semibold uppercase leading-[0.98] tracking-[-0.055em]">
+                I enjoy taking ideas that feel messy or complicated and turning them into something simple, structured, and intentional.
+              </ScrollRevealText>
+
+              <ScrollRevealText className="mt-10 text-[clamp(1.8rem,4vw,4.5rem)] font-semibold uppercase leading-[0.98] tracking-[-0.055em]">
+                My goal is always the same: to create work that feels good, works well, and leaves a lasting impression.
+              </ScrollRevealText>
+            </motion.div>
           </div>
 
-          <div className="grid gap-12 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
-            <div>
-              <h1 className="max-w-5xl text-5xl font-semibold leading-[0.98] tracking-[-0.06em] sm:text-7xl lg:text-8xl">
-                Designer by passion.
-                <span className="block text-[#ff5a1f]">
-                  Creator by nature.
-                </span>
-              </h1>
+          {/* RIGHT PROFILE IMAGE */}
+          <motion.aside
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.2 }}
+            className="relative lg:pt-12"
+          >
+            <div className="relative mx-auto max-w-[440px]">
 
-              <p className="mt-8 max-w-2xl text-base leading-8 text-black/60 dark:text-white/60 sm:text-lg">
-                I&apos;m Ahsan Malik, a multidisciplinary creative
-                focused on graphic design, motion, video, and
-                digital experiences. I enjoy turning ideas into
-                thoughtful visuals that communicate clearly and
-                make an impact.
-              </p>
+              {/* Image frame */}
+              <div className="relative aspect-[3/4] overflow-hidden border border-white/20 bg-[#1c1c1c] p-3 sm:p-4">
 
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Link
-                  href="/contact"
-                  className="group inline-flex items-center gap-3 rounded-full bg-[#ff5a1f] px-6 py-3.5 text-sm font-medium text-white transition hover:bg-[#e94b13]"
-                >
-                  Let&apos;s work together
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </Link>
+                <Image
+                  src="/images/about/fotoabout.jpeg"
+                  alt="Ahsan Malik portrait"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 90vw, 440px"
+                  className="object-cover"
+                />
 
-                <Link
-                  href="/work"
-                  className="inline-flex items-center gap-2 rounded-full border border-black/15 px-6 py-3.5 text-sm font-medium transition hover:border-[#ff5a1f] dark:border-white/15"
-                >
-                  Explore my work
-                  <ArrowDownRight className="h-4 w-4" />
-                </Link>
               </div>
-            </div>
 
-            {/* Profile card */}
-            <div className="relative">
-              <div className="relative flex aspect-[4/5] min-h-[300px] flex-col justify-between overflow-hidden rounded-3xl bg-[#1c1c1c] p-6 text-white sm:p-8">
-                <div className="absolute -right-20 -top-16 h-64 w-64 rounded-full border border-white/10" />
-                <div className="absolute -right-8 -top-4 h-44 w-44 rounded-full border border-white/10" />
-                <div className="absolute -bottom-20 -left-12 h-64 w-64 rounded-full bg-[#ff5a1f]/15 blur-3xl" />
+              {/* Image caption */}
+              <div className="mt-5 flex items-start justify-between gap-4 border-t border-white/20 pt-5">
 
-                <div className="relative flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">
-                    Creative Portfolio
-                  </span>
-                  <Sparkles className="h-5 w-5 text-[#ff5a1f]" />
-                </div>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-wide">
+                    Ahsan Malik
+                  </p>
 
-                <div className="relative">
-                  <p className="mb-3 text-sm text-white/50">
+                  <p className="mt-1 text-xs uppercase tracking-[0.15em] text-white/45">
                     Graphic Designer & Creative
                   </p>
-                  <p className="text-5xl font-semibold tracking-[-0.06em] sm:text-6xl">
-                    Ahsan
-                    <br />
-                    <span className="text-[#ff5a1f]">Malik.</span>
-                  </p>
-                  <div className="mt-6 h-px w-full bg-white/15" />
-                  <p className="mt-4 text-sm leading-6 text-white/60">
-                    Creating meaningful visuals, one project
-                    at a time.
-                  </p>
                 </div>
+
+                <span className="text-xs text-[#ff5a1f]">
+                  01 / ABOUT
+                </span>
+
               </div>
 
-              <div className="absolute -bottom-5 right-4 rounded-2xl border border-black/10 bg-white px-5 py-4 shadow-xl dark:border-white/10 dark:bg-[#252525] sm:right-8">
-                <p className="text-2xl font-semibold tracking-tight">
-                  2+
+              {/* Experience */}
+              <div className="mt-10 border-t border-white/20 pt-6">
+                <p className="text-5xl font-semibold tracking-[-0.06em]">
+                  4+
                 </p>
-                <p className="mt-1 text-xs text-black/50 dark:text-white/50">
-                  Years of remote design experience
+
+                <p className="mt-2 text-xs uppercase tracking-[0.15em] text-white/45">
+                  Years of design experience
                 </p>
               </div>
+
             </div>
-          </div>
+          </motion.aside>
+
         </div>
       </section>
 
