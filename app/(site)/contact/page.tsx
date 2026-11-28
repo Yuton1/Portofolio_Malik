@@ -130,7 +130,7 @@ export default function ContactPage() {
         <div className="mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-16">
           {/* LEFT COLUMN: HEADING + FIND ME ONLINE */}
           <div className="flex flex-col">
-            <h1 className="text-8xl font-semibold leading-[0.95] tracking-[-0.06em] sm:text-8xl lg:text-[clamp(4.25rem,6.5vw,7rem)]">
+            <h1 className="text-98rem font-semibold leading-[0.95] tracking-[-0.06em] sm:text-8rem lg:text-[clamp(8rem,6.5vw,11rem)]">
               Have an
               <br />
               idea?
@@ -140,9 +140,9 @@ export default function ContactPage() {
 
             {/* SOCIAL LINKS */}
             <div className="mt-14 max-w-md lg:mt-20">
-              <h3 className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-black/45 dark:text-white/45">
-                Find me online
-              </h3>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                  Find me online
+              </h2>
 
               <div className="divide-y divide-black/10 dark:divide-white/10">
                 {CONTACT_LINKS.map((item) => {
