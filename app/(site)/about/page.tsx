@@ -130,7 +130,7 @@ export default function AboutPage() {
   };
 
   return (
-    <main className="overflow-hidden bg-[#0D0D0D] text-white">
+    <main className="overflow-hidden bg-[#1c1c1c] text-white">
 
       {/* ABOUT INTRO */}
       <section className="relative min-h-screen border-b border-white/15 px-5 pb-20 pt-32 sm:px-8 lg:px-12 lg:pt-36">
@@ -196,7 +196,7 @@ export default function AboutPage() {
               </div>
 
               {/* Image caption */}
-              <div className="mt-6 divide-y divide-white/25 border-y border-white/25 bg-[#0D0D0D]">
+              <div className="mt-6 divide-y divide-white/25 border-y border-white/25 bg-[#1c1c1c] p-6 text-sm sm:p-8">
                 <div className="grid grid-cols-[1.15fr_0.85fr] items-center gap-4 py-6">
                   <p className="text-sm font-semibold tracking-tight text-white sm:text-base">
                     Multidisciplinary Designer
@@ -231,46 +231,6 @@ export default function AboutPage() {
             </div>
           </motion.aside>
 
-        </div>
-      </section>
-
-      {/* INTRODUCTION */}
-      <section className="border-y border-black/10 bg-black/[0.025] px-5 py-20 dark:border-white/10 dark:bg-white/[0.025] sm:px-8 sm:py-28 lg:px-12">
-        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[0.7fr_1.3fr] md:gap-20">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#ff5a1f]">
-              A Little About Me
-            </p>
-            <h2 className="mt-5 text-3xl font-semibold tracking-[-0.04em] sm:text-5xl">
-              Good design starts with understanding.
-            </h2>
-          </div>
-
-          <div className="space-y-6 text-base leading-8 text-black/60 dark:text-white/60 sm:text-lg">
-            <p>
-              I&apos;m a graphic designer with around two years
-              of remote design experience. My work includes
-              creating visual content for digital platforms,
-              promotional materials, and other communication
-              needs.
-            </p>
-
-            <p>
-              I believe design is more than making something
-              look good. It is about understanding the purpose
-              behind a project, communicating the right message,
-              and creating visuals that feel consistent and
-              intentional.
-            </p>
-
-            <p>
-              Beyond graphic design, I also explore motion
-              design, video editing, web development, and UI/UX.
-              These disciplines help me approach creative
-              projects from different perspectives and build
-              more complete digital experiences.
-            </p>
-          </div>
         </div>
       </section>
 
